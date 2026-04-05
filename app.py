@@ -3,6 +3,24 @@ import gspread
 from google.oauth2.service_account import Credentials
 from datetime import date, datetime
 
+# ─── AUTENTICACIÓN ─────────────────────────────────────────────────────────
+def check_password():
+    if "authenticated" not in st.session_state:
+        st.session_state.authenticated = False
+
+    if not st.session_state.authenticated:
+        st.title("🔒 Sentinel · AD010")
+        password = st.text_input("Contraseña", type="password")
+        if st.button("Entrar"):
+            if password == st.secrets["app"]["password"]:
+                st.session_state.authenticated = True
+                st.rerun()
+            else:
+                st.error("Contraseña incorrecta.")
+        st.stop()
+
+check_password()
+
 # ─── CONEXIÓN A GOOGLE SHEETS ──────────────────────────────────────────────
 @st.cache_resource
 def conectar_sheets():
